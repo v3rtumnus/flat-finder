@@ -12,22 +12,19 @@ import java.util.List;
 public abstract class RealEstateCrawler {
 
     @Value("${criteria.minRooms}")
-    Integer minRooms;
+    protected Integer minRooms;
 
     @Value("${criteria.minSquareMetres}")
-    Integer minSquareMetres;
+    protected Integer minSquareMetres;
 
     @Value("${criteria.maxSalesPrice}")
-    Long maxSalesPrice;
+    protected Long maxSalesPrice;
 
     @Value("${criteria.maxRent}")
-    Long maxRent;
+    protected Long maxRent;
 
     @Value("${criteria.cities}")
-    List<String> cities;
-
-    @Value("${chromedriver.path}")
-    String chromeDriverPath;
+    protected List<String> cities;
 
     public abstract List<RealEstate> findRealEstates();
 }
