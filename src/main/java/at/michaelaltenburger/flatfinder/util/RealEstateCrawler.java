@@ -12,16 +12,16 @@ import java.util.List;
 public abstract class RealEstateCrawler {
 
     @Value("${criteria.minRooms}")
-    protected Integer minRooms;
+    protected String minRooms;
 
     @Value("${criteria.minSquareMetres}")
-    protected Integer minSquareMetres;
+    protected String minSquareMetres;
 
     @Value("${criteria.maxSalesPrice}")
-    protected Long maxSalesPrice;
+    protected String maxSalesPrice;
 
     @Value("${criteria.maxRent}")
-    protected Long maxRent;
+    protected String maxRent;
 
     @Value("${criteria.cities}")
     protected List<String> cities;

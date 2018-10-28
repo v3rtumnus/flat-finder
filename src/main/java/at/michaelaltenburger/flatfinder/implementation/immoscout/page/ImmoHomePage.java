@@ -8,9 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 
 public class ImmoHomePage extends FlatFinderPage {
 
-    @FindBy(xpath = "//div[@id='at-gac-input']/input")
-    private WebElement cityTextField;
-
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement submitButton;
 
@@ -20,10 +17,6 @@ public class ImmoHomePage extends FlatFinderPage {
 
     public void navigate() {
         this.util.navigateTo("http://www.immobilienscout24.at/");
-    }
-
-    public void enterCity(String city) {
-        this.cityTextField.sendKeys(city);
     }
 
     public ImmoSearchPage submit() {
