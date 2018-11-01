@@ -39,12 +39,10 @@ public class ImmoScoutCrawler extends RealEstateCrawler {
 
         for (String city : cities) {
             realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.RENT));
-            realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.BUY));
-            realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.RENT));
-            realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.BUY));
+            //realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.BUY));
+            //realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.RENT));
+            //realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.BUY));
         }
-
-        realEstates.forEach(System.out::println);
 
         log.info("Finished crawling Immobilienscout24");
 

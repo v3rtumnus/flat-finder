@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+    build: db/
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_DB: 'flat-finder'
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+    - database_data:/var/lib/postgresql/data
+
+volumes:
+  database_data:
+    driver: local

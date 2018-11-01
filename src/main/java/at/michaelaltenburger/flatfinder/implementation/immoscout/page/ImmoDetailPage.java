@@ -1,9 +1,6 @@
 package at.michaelaltenburger.flatfinder.implementation.immoscout.page;
 
-import at.michaelaltenburger.flatfinder.entity.PurchaseType;
-import at.michaelaltenburger.flatfinder.entity.RealEstate;
-import at.michaelaltenburger.flatfinder.entity.RealEstateType;
-import at.michaelaltenburger.flatfinder.entity.Website;
+import at.michaelaltenburger.flatfinder.entity.*;
 import at.michaelaltenburger.flatfinder.util.FlatFinderPage;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.openqa.selenium.By;
@@ -70,7 +67,8 @@ public class ImmoDetailPage extends FlatFinderPage {
 
         String imageSource = imageField.getAttribute("src");
 
-        return new RealEstate(id, headingText, squareMetres, rooms, type, Website.IMMOSCOUT24, city, postalCode, price, purchaseType,
+        return new RealEstate(id, headingText, squareMetres, rooms, type, RealEstateState.SAVED,
+                Website.IMMOSCOUT24, city, postalCode, price, purchaseType,
                 util.getDriver().getCurrentUrl(), imageSource, false);
     }
 
