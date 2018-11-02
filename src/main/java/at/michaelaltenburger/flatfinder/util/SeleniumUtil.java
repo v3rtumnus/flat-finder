@@ -3,6 +3,8 @@ package at.michaelaltenburger.flatfinder.util;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +21,10 @@ public class SeleniumUtil {
     public void initDriver() {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
-        this.driver = new ChromeDriver();
+        final ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("headless", "window-size=1200,600");
+
+        this.driver = new ChromeDriver(chromeOptions);
     }
 
     public void close() {

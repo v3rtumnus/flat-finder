@@ -1,4 +1,4 @@
-package at.michaelaltenburger.flatfinder.implementation.immoscout.page;
+package at.michaelaltenburger.flatfinder.crawler.immoscout.page;
 
 import at.michaelaltenburger.flatfinder.util.FlatFinderPage;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;

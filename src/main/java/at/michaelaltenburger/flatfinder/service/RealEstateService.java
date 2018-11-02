@@ -2,12 +2,14 @@ package at.michaelaltenburger.flatfinder.service;
 
 import at.michaelaltenburger.flatfinder.dao.RealEstateRepository;
 import at.michaelaltenburger.flatfinder.entity.RealEstate;
+import at.michaelaltenburger.flatfinder.entity.RealEstateState;
 import at.michaelaltenburger.flatfinder.util.RealEstateCrawler;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class RealEstateService {
         this.realEstateRepository = realEstateRepository;
     }
 
+    @Async
     public void checkForNewRealEstates() {
         seleniumUtil.initDriver();
 
@@ -42,6 +45,23 @@ public class RealEstateService {
 
         removeOutdatedRealEstates(ids);
         addRealEstates(realEstates);
+    }
+
+
+    public List<RealEstate> findAll() {
+        return realEstateRepository.findAll();
+    }
+
+    public List<RealEstate> findSavedRealEstates() {
+        return realEstateRepository.findByStateIs(RealEstateState.SAVED);
+    }
+
+    public List<RealEstate> findFavoriteRealEstates() {
+        return realEstateRepository.findByStateIs(RealEstateState.FAVORITE);
+    }
+
+    public List<RealEstate> findArchivedRealEstates() {
+        return realEstateRepository.findByStateIs(RealEstateState.ARCHIVED);
     }
 
     private List<RealEstate> crawlWebsitesForRealEstates() {

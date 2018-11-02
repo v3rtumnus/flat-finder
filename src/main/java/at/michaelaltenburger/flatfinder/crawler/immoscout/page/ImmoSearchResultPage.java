@@ -1,4 +1,4 @@
-package at.michaelaltenburger.flatfinder.implementation.immoscout.page;
+package at.michaelaltenburger.flatfinder.crawler.immoscout.page;
 
 import at.michaelaltenburger.flatfinder.entity.PurchaseType;
 import at.michaelaltenburger.flatfinder.entity.RealEstate;
@@ -7,19 +7,15 @@ import at.michaelaltenburger.flatfinder.entity.Website;
 import at.michaelaltenburger.flatfinder.util.FlatFinderPage;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 public class ImmoSearchResultPage extends FlatFinderPage {
-
-    @FindBy(xpath = "//div[@class='result-item-image' and not(@id)]")
-    private WebElement resultLink;
 
     @FindBy(xpath = "//div[@id='developer-premium-listing']/following-sibling::div[@class='result-item-info']/h2/a")
     private List<WebElement> projectDescriptions;
@@ -47,18 +43,24 @@ public class ImmoSearchResultPage extends FlatFinderPage {
         return projects;
     }
 
-    public ImmoDetailPage getFirstRealEstateOnPage() {
+    public Optional<ImmoDetailPage> getFirstRealEstateOnPage() {
         //sleep to wait for result link
         try {
             Thread.sleep(1000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        resultLink.click();
+
+        List<WebElement> resultLinks = util.getDriver().findElements(By.xpath("//div[@class='result-item-image' and not(@id)]"));
+        if(resultLinks.isEmpty()) {
+            return Optional.empty();
+        }
+
+        resultLinks.get(0).click();
 
         ImmoDetailPage detailPage = new ImmoDetailPage(util);
         PageFactory.initElements(util.getDriver(), detailPage);
 
-        return detailPage;
+        return Optional.of(detailPage);
     }
 }

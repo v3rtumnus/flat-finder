@@ -1,12 +1,12 @@
-package at.michaelaltenburger.flatfinder.implementation.immoscout;
+package at.michaelaltenburger.flatfinder.crawler.immoscout;
 
+import at.michaelaltenburger.flatfinder.crawler.immoscout.page.ImmoSearchPage;
+import at.michaelaltenburger.flatfinder.crawler.immoscout.page.ImmoSearchResultPage;
 import at.michaelaltenburger.flatfinder.entity.PurchaseType;
 import at.michaelaltenburger.flatfinder.entity.RealEstate;
 import at.michaelaltenburger.flatfinder.entity.RealEstateType;
-import at.michaelaltenburger.flatfinder.implementation.immoscout.page.ImmoDetailPage;
-import at.michaelaltenburger.flatfinder.implementation.immoscout.page.ImmoHomePage;
-import at.michaelaltenburger.flatfinder.implementation.immoscout.page.ImmoSearchPage;
-import at.michaelaltenburger.flatfinder.implementation.immoscout.page.ImmoSearchResultPage;
+import at.michaelaltenburger.flatfinder.crawler.immoscout.page.ImmoDetailPage;
+import at.michaelaltenburger.flatfinder.crawler.immoscout.page.ImmoHomePage;
 import at.michaelaltenburger.flatfinder.util.RealEstateCrawler;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ImmoScoutCrawler extends RealEstateCrawler {
@@ -34,14 +35,18 @@ public class ImmoScoutCrawler extends RealEstateCrawler {
 
         List<RealEstate> realEstates = new ArrayList<>();
 
-        this.homePage.initElements();
-        this.homePage.navigate();
-
         for (String city : cities) {
+            log.info("Crawling for flats to rent in {}", city);
             realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.RENT));
-            //realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.BUY));
-            //realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.RENT));
-            //realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.BUY));
+
+            log.info("Crawling for flats to buy in {}", city);
+            realEstates.addAll(getRealEstates(city, RealEstateType.FLAT, PurchaseType.BUY));
+
+            log.info("Crawling for houses to rent in {}", city);
+            realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.RENT));
+
+            log.info("Crawling for houses to buy in {}", city);
+            realEstates.addAll(getRealEstates(city, RealEstateType.HOUSE, PurchaseType.BUY));
         }
 
         log.info("Finished crawling Immobilienscout24");
@@ -50,6 +55,9 @@ public class ImmoScoutCrawler extends RealEstateCrawler {
     }
 
     private List<RealEstate> getRealEstates(String city, RealEstateType type, PurchaseType purchaseType) {
+        this.homePage.initElements();
+        this.homePage.navigate();
+
         ImmoSearchPage searchPage = this.homePage.submit();
 
         String maxPrice = purchaseType == PurchaseType.BUY ? maxSalesPrice : maxRent;
@@ -59,17 +67,19 @@ public class ImmoScoutCrawler extends RealEstateCrawler {
 
         List<RealEstate> realEstates = new ArrayList<>(searchResultPage.getProjects(type, purchaseType, city));
 
-        ImmoDetailPage detailPage = searchResultPage.getFirstRealEstateOnPage();
+        Optional<ImmoDetailPage> detailPageOptional = searchResultPage.getFirstRealEstateOnPage();
 
-        realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
-
-        while (detailPage.hasNext()) {
-            detailPage = detailPage.goToNextRealEstate();
+        if(detailPageOptional.isPresent()) {
+            ImmoDetailPage detailPage = detailPageOptional.get();
 
             realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
-        }
 
-        detailPage.goToHomePage();
+            while (detailPage.hasNext()) {
+                detailPage = detailPage.goToNextRealEstate();
+
+                realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
+            }
+        }
 
         return realEstates;
     }

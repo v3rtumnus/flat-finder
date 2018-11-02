@@ -1,15 +1,11 @@
-package at.michaelaltenburger.flatfinder.implementation.immoscout.page;
+package at.michaelaltenburger.flatfinder.crawler.immoscout.page;
 
 import at.michaelaltenburger.flatfinder.entity.*;
 import at.michaelaltenburger.flatfinder.util.FlatFinderPage;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
-import java.net.URL;
-import java.util.regex.Pattern;
 
 public class ImmoDetailPage extends FlatFinderPage {
 
