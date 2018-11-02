@@ -21,7 +21,6 @@ task wrapper(type: Wrapper) {
 
 apply plugin: 'java'
 
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -31,6 +30,8 @@ repositories {
 
 bootJar {
     launchScript()
+
+    baseName "flat-finder"
 }
 
 dependencies {
