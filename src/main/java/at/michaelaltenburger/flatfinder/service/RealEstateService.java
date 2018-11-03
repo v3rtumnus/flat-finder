@@ -42,10 +42,17 @@ public class RealEstateService {
 
     @Async
     public void checkForNewRealEstates() {
+        Optional<SearchConfiguration> searchConfiguration = searchConfigurationRepository.findById(1L);
+
+        if(!searchConfiguration.isPresent()) {
+            log.error("No search configuration found, aborting ...");
+            return;
+        }
+
         seleniumUtil.initDriver();
 
         try {
-            List<RealEstate> realEstates = crawlWebsitesForRealEstates();
+            List<RealEstate> realEstates = crawlWebsitesForRealEstates(searchConfiguration.get());
             List<String> ids = realEstates.stream().map(RealEstate::getId).collect(Collectors.toList());
 
             removeOutdatedRealEstates(ids);
@@ -74,21 +81,14 @@ public class RealEstateService {
         return realEstateRepository.findByStateIs(RealEstateState.ARCHIVED);
     }
 
-    private List<RealEstate> crawlWebsitesForRealEstates() {
+    private List<RealEstate> crawlWebsitesForRealEstates(SearchConfiguration configuration) {
         log.info("Crawling all known sites");
 
         List<RealEstate> realEstates = new ArrayList<>();
         Map<String, RealEstateCrawler> crawlers = applicationContext.getBeansOfType(RealEstateCrawler.class);
 
-        Optional<SearchConfiguration> searchConfiguration = searchConfigurationRepository.findById(1L);
-
-        if(!searchConfiguration.isPresent()) {
-            log.error("No search configuration found, aborting ...");
-            return realEstates;
-        }
-
         for (RealEstateCrawler crawler : crawlers.values()) {
-            crawler.initSearchConfiguration(searchConfiguration.get());
+            crawler.initSearchConfiguration(configuration);
             realEstates.addAll(crawler.findRealEstates());
         }
 
