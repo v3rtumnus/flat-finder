@@ -2,9 +2,7 @@ package at.michaelaltenburger.flatfinder.service;
 
 import at.michaelaltenburger.flatfinder.dao.RealEstateRepository;
 import at.michaelaltenburger.flatfinder.dao.SearchConfigurationRepository;
-import at.michaelaltenburger.flatfinder.entity.RealEstate;
-import at.michaelaltenburger.flatfinder.entity.RealEstateState;
-import at.michaelaltenburger.flatfinder.entity.SearchConfiguration;
+import at.michaelaltenburger.flatfinder.entity.*;
 import at.michaelaltenburger.flatfinder.util.RealEstateCrawler;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.slf4j.Logger;
@@ -69,16 +67,12 @@ public class RealEstateService {
         return realEstateRepository.findAll();
     }
 
-    public List<RealEstate> findSavedRealEstates() {
-        return realEstateRepository.findByStateIs(RealEstateState.SAVED);
+    public List<RealEstate> findAll(RealEstateState state) {
+        return realEstateRepository.findByStateIs(state);
     }
 
-    public List<RealEstate> findFavoriteRealEstates() {
-        return realEstateRepository.findByStateIs(RealEstateState.FAVORITE);
-    }
-
-    public List<RealEstate> findArchivedRealEstates() {
-        return realEstateRepository.findByStateIs(RealEstateState.ARCHIVED);
+    public List<RealEstate> findAll(RealEstateState state, RealEstateType realEstateType, PurchaseType purchaseType) {
+        return realEstateRepository.findByStateIsAndTypeIsAndPurchaseTypeIs(state, realEstateType, purchaseType);
     }
 
     private List<RealEstate> crawlWebsitesForRealEstates(SearchConfiguration configuration) {
