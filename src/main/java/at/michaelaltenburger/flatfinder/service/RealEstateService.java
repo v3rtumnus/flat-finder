@@ -1,8 +1,10 @@
 package at.michaelaltenburger.flatfinder.service;
 
 import at.michaelaltenburger.flatfinder.dao.RealEstateRepository;
+import at.michaelaltenburger.flatfinder.dao.SearchConfigurationRepository;
 import at.michaelaltenburger.flatfinder.entity.RealEstate;
 import at.michaelaltenburger.flatfinder.entity.RealEstateState;
+import at.michaelaltenburger.flatfinder.entity.SearchConfiguration;
 import at.michaelaltenburger.flatfinder.util.RealEstateCrawler;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,14 +26,17 @@ public class RealEstateService {
 
     private final SeleniumUtil seleniumUtil;
     private final ApplicationContext applicationContext;
+    private final SearchConfigurationRepository searchConfigurationRepository;
     private final RealEstateRepository realEstateRepository;
 
     @Autowired
     public RealEstateService(ApplicationContext applicationContext,
                              SeleniumUtil seleniumUtil,
+                             SearchConfigurationRepository searchConfigurationRepository,
                              RealEstateRepository realEstateRepository) {
         this.applicationContext = applicationContext;
         this.seleniumUtil = seleniumUtil;
+        this.searchConfigurationRepository = searchConfigurationRepository;
         this.realEstateRepository = realEstateRepository;
     }
 
@@ -38,13 +44,17 @@ public class RealEstateService {
     public void checkForNewRealEstates() {
         seleniumUtil.initDriver();
 
-        List<RealEstate> realEstates = crawlWebsitesForRealEstates();
-        List<String> ids = realEstates.stream().map(RealEstate::getId).collect(Collectors.toList());
+        try {
+            List<RealEstate> realEstates = crawlWebsitesForRealEstates();
+            List<String> ids = realEstates.stream().map(RealEstate::getId).collect(Collectors.toList());
 
-        seleniumUtil.close();
-
-        removeOutdatedRealEstates(ids);
-        addRealEstates(realEstates);
+            removeOutdatedRealEstates(ids);
+            addRealEstates(realEstates);
+        } catch (Exception e) {
+            log.error("An exception occured", e);
+        } finally {
+            seleniumUtil.close();
+        }
     }
 
 
@@ -70,7 +80,15 @@ public class RealEstateService {
         List<RealEstate> realEstates = new ArrayList<>();
         Map<String, RealEstateCrawler> crawlers = applicationContext.getBeansOfType(RealEstateCrawler.class);
 
+        Optional<SearchConfiguration> searchConfiguration = searchConfigurationRepository.findById(1L);
+
+        if(!searchConfiguration.isPresent()) {
+            log.error("No search configuration found, aborting ...");
+            return realEstates;
+        }
+
         for (RealEstateCrawler crawler : crawlers.values()) {
+            crawler.initSearchConfiguration(searchConfiguration.get());
             realEstates.addAll(crawler.findRealEstates());
         }
 

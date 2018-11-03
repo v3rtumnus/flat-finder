@@ -72,12 +72,20 @@ public class ImmoScoutCrawler extends RealEstateCrawler {
         if(detailPageOptional.isPresent()) {
             ImmoDetailPage detailPage = detailPageOptional.get();
 
-            realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
+            try {
+                realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
+            } catch(Exception e) {
+                log.error("Exception during mapping of real estate", e);
+            }
 
             while (detailPage.hasNext()) {
                 detailPage = detailPage.goToNextRealEstate();
 
-                realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
+                try {
+                    realEstates.add(detailPage.mapToRealEstate(type, purchaseType));
+                } catch(Exception e) {
+                    log.error("Exception during mapping of real estate", e);
+                }
             }
         }
 
