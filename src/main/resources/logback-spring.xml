@@ -10,7 +10,7 @@
             </encoder>
             <file>/opt/flat-finder/log/${LOG_FILE}</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+                <fileNamePattern>/opt/flat-finder/log/${LOG_FILE}.%d</fileNamePattern>
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
         </appender>
