@@ -13,7 +13,7 @@ CREATE TABLE real_estate (
   type character varying(255),
   url character varying(255),
   note character varying(2000),
-  website integer,
+  website character varying(255),
   CONSTRAINT real_estate_pkey PRIMARY KEY (id)
 );
 

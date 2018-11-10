@@ -33,6 +33,7 @@ public class RealEstate {
     private RealEstateState state;
 
     @Column(name = "WEBSITE")
+    @Enumerated(EnumType.STRING)
     private Website website;
 
     @Column(name = "CITY")
