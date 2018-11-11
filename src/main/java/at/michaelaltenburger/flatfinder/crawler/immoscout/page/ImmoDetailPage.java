@@ -12,7 +12,7 @@ public class ImmoDetailPage extends FlatFinderPage {
     @FindBy(xpath = "//span[text()='Nächste Immobilie']")
     private WebElement nextLink;
 
-    @FindBy(tagName = "h1")
+    @FindBy(id = "at-expose-title")
     private WebElement heading;
 
     @FindBy(xpath = "//span[@class='postalcode']")

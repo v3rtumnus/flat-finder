@@ -10,15 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-
+@CrossOrigin(origins = "*")
 public class RealEstateController {
     private static final Logger log = LoggerFactory.getLogger(RealEstateController.class);
 
@@ -46,10 +43,12 @@ public class RealEstateController {
     }
 
     @GetMapping("/{state}")
-    public List<RealEstate> getAllRealEstates(@PathVariable("state") RealEstateState state) {
-        log.info("retrieving all real estates");
+    public List<RealEstate> getAllRealEstates(@PathVariable("state") String state) {
+        RealEstateState realEstateState = RealEstateState.valueOf(state.toUpperCase());
 
-        return realEstateService.findAll(state);
+        log.info("retrieving real estates in state {}", realEstateState);
+
+        return realEstateService.findAll(realEstateState);
     }
 
     @GetMapping("/{state}{realEstateType}/{}")
