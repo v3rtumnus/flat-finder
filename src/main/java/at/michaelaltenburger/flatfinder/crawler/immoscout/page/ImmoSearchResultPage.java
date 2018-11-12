@@ -37,7 +37,7 @@ public class ImmoSearchResultPage extends FlatFinderPage {
             String id = projectDescription.getAttribute("href");
             String title = projectDescription.getText();
 
-            projects.add(new RealEstate(id, title, type, purchaseType, Website.IMMOSCOUT24, city, true));
+            projects.add(new RealEstate(id, title, id, type, purchaseType, Website.IMMOSCOUT24, city, true));
         }
 
         return projects;

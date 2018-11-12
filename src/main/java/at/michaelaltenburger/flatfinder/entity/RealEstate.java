@@ -62,10 +62,11 @@ public class RealEstate {
 
     }
 
-    public RealEstate(String id, String title, RealEstateType type, PurchaseType purchaseType,
+    public RealEstate(String id, String title, String url, RealEstateType type, PurchaseType purchaseType,
                       Website website, String city, boolean project) {
         this.id = id;
         this.title = title;
+        this.url = url;
         this.type = type;
         this.purchaseType = purchaseType;
         this.website = website;
