@@ -59,4 +59,14 @@ public class RealEstateController {
 
         return realEstateService.findAll(state, realEstateType, purchaseType);
     }
+
+    @PutMapping("/state/{id}/{state}")
+    public RealEstate updateRealEstate(@PathVariable("id") String id,
+                                       @PathVariable("state") String state) {
+        log.info("updating real estate");
+
+        RealEstateState realEstateState = RealEstateState.valueOf(state.toUpperCase());
+
+        return realEstateService.updateState(id, realEstateState);
+    }
 }

@@ -75,6 +75,21 @@ public class RealEstateService {
         return realEstateRepository.findByStateIsAndTypeIsAndPurchaseTypeIs(state, realEstateType, purchaseType);
     }
 
+    public RealEstate updateState(String id, RealEstateState state) {
+        Optional<RealEstate> realEstateOptional = realEstateRepository.findById(id);
+
+        if(realEstateOptional.isPresent()) {
+            RealEstate realEstate = realEstateOptional.get();
+            realEstate.setState(state);
+
+            realEstateRepository.save(realEstate);
+
+            return realEstate;
+        }
+
+        return null;
+    }
+
     private List<RealEstate> crawlWebsitesForRealEstates(SearchConfiguration configuration) {
         log.info("Crawling all known sites");
 
