@@ -14,6 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ImmoSearchResultPage extends FlatFinderPage {
 
@@ -34,10 +35,10 @@ public class ImmoSearchResultPage extends FlatFinderPage {
         }
 
         for(WebElement projectDescription : projectDescriptions) {
-            String id = projectDescription.getAttribute("href");
+            String url = projectDescription.getAttribute("href");
             String title = projectDescription.getText();
 
-            projects.add(new RealEstate(id, title, id, type, purchaseType, Website.IMMOSCOUT24, city, true));
+            projects.add(new RealEstate(UUID.randomUUID().toString(), title, url, type, purchaseType, Website.IMMOSCOUT24, city, true));
         }
 
         return projects;
