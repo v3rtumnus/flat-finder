@@ -64,4 +64,28 @@ public class ImmoSearchResultPage extends FlatFinderPage {
 
         return Optional.of(detailPage);
     }
+
+    public void navigate(RealEstateType type, PurchaseType purchaseType, String city, String minSquareMetres, String minRooms, String maxPrice) {
+        StringBuilder urlBuilder = new StringBuilder("http://www.immobilienscout24.at/resultlist");
+
+        if (type == RealEstateType.FLAT) {
+            urlBuilder.append("?estateType=APARTMENT");
+        } else {
+            urlBuilder.append("?estateType=HOUSE");
+        }
+
+        if (purchaseType == PurchaseType.BUY) {
+            urlBuilder.append("&transferType=BUY");
+        } else {
+            urlBuilder.append("&transferType=RENT");
+        }
+
+        urlBuilder.append("&spot=").append(city);
+        urlBuilder.append("&totalArea=").append(minSquareMetres);
+        urlBuilder.append("&numberOfRooms=").append(minRooms);
+        urlBuilder.append("&price=").append(maxPrice);
+
+
+        this.util.navigateTo(urlBuilder.toString());
+    }
 }

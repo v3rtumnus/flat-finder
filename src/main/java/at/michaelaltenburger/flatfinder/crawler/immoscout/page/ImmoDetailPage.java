@@ -72,15 +72,6 @@ public class ImmoDetailPage extends FlatFinderPage {
         return nextLink.isDisplayed();
     }
 
-    public ImmoHomePage goToHomePage() {
-        headerLogo.click();
-
-        ImmoHomePage homePage = new ImmoHomePage(util);
-        PageFactory.initElements(util.getDriver(), homePage);
-
-        return homePage;
-    }
-
     private String reformatNumber(String number) {
         return number.replace(".", "").replace(",", ".");
     }
