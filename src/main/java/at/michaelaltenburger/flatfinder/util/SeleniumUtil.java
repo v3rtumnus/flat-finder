@@ -36,6 +36,7 @@ public class SeleniumUtil {
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(firefoxBinary);
+        firefoxOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
         this.driver = new FirefoxDriver(firefoxOptions);
 
