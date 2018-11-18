@@ -3,9 +3,12 @@ package at.michaelaltenburger.flatfinder.crawler.immoscout.page;
 import at.michaelaltenburger.flatfinder.entity.*;
 import at.michaelaltenburger.flatfinder.util.FlatFinderPage;
 import at.michaelaltenburger.flatfinder.util.SeleniumUtil;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ImmoDetailPage extends FlatFinderPage {
 
@@ -50,6 +53,9 @@ public class ImmoDetailPage extends FlatFinderPage {
     }
 
     public RealEstate mapToRealEstate(RealEstateType type, PurchaseType purchaseType) {
+        WebDriverWait wait = new WebDriverWait(util.getDriver(), 5);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("at-expose-title")));
+
         String id = Website.IMMOSCOUT24.name() + "-" + util.getDriver().getCurrentUrl().substring(
                 util.getDriver().getCurrentUrl().lastIndexOf("/") + 1);
 
