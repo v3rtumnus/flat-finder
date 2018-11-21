@@ -122,9 +122,15 @@ public class RealEstateService {
                 .map(RealEstate::getId)
                 .collect(Collectors.toList());
 
-        List<RealEstate> existingRealEstates = realEstateRepository.findByIdIn(realEstateIds);
+        List<String> existingRealEstatesIds = realEstateRepository.findByIdIn(realEstateIds)
+                .stream()
+                .map(RealEstate::getId)
+                .collect(Collectors.toList());
 
-        realEstates.removeAll(existingRealEstates);
+        realEstates = realEstates
+                .stream()
+                .filter(realEstate -> !existingRealEstatesIds.contains(realEstate.getId()))
+                .collect(Collectors.toList());
 
         realEstateRepository.saveAll(realEstates);
 
